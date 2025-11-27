@@ -4,21 +4,6 @@
 
 ---
 
-## 📂 Project Structure
-
-student‑market/
-│
-├── frontend/ # React frontend application
-│ ├── public/
-│ ├── src/
-│ └── Screenshot.png # Screenshot image used in this README
-│
-└── backend/ # (Empty for now) Backend API code (Laravel or React‑based)
-
-
-> ⚠️ Because the README is in the root folder and the screenshot is inside `frontend/`, the relative path below is used to correctly reference the image.
-
----
 
 ## 🖼 Project Screenshot
 
