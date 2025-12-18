@@ -6,7 +6,6 @@ import {
   Button,
   List,
   ListItem,
-  ListItemText,
   ListItemAvatar,
   Avatar,
   Divider,
@@ -83,7 +82,7 @@ const chatUser = {
 };
 
 export default function ChatRoomPage() {
-  const { id } = useParams();
+  const { id: _id } = useParams();
   const navigate = useNavigate();
   const [messages, setMessages] = useState(mockMessages);
   const [newMessage, setNewMessage] = useState("");

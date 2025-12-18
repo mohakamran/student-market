@@ -5,13 +5,13 @@ import {
   Typography,
   Button,
   Card,
+  CardContent,
   CardMedia,
   Grid,
   Container,
   Chip,
   IconButton,
   Avatar,
-  Divider,
   useTheme,
   alpha,
   Rating,
@@ -141,7 +141,7 @@ export default function ListingDetailPage() {
     );
   }
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 

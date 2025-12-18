@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
+  Grid,
   Container,
   Typography,
-  Grid,
   Card,
   CardContent,
   CardMedia,
@@ -10,7 +10,6 @@ import {
   Box,
   Chip,
   useTheme,
-  alpha,
   Tabs,
   Tab
 } from "@mui/material";
@@ -56,7 +55,7 @@ export default function MyListingsPage() {
     }
   ];
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_: React.SyntheticEvent | null, newValue: number) => {
     setTabValue(newValue);
   };
 

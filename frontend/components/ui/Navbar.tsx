@@ -25,13 +25,11 @@ import {
 import {
   Menu as MenuIcon,
   AccountCircle,
-  ShoppingBag,
   Add,
   Chat,
   Home,
   Store,
   Notifications,
-  Favorite,
   Sell,
   School,
   Close,

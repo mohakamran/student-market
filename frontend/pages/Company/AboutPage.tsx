@@ -1,9 +1,7 @@
-import React from "react";
 import {
   Container,
   Typography,
   Card,
-  CardContent,
   Grid,
   Box,
   useTheme,
@@ -13,13 +11,10 @@ import {
   Chip,
   Fade,
   Paper,
-  Avatar,
-  Divider
 } from "@mui/material";
 import {
   School,
   Groups,
-  EmojiEvents,
   Security,
   TrendingUp,
   ConnectWithoutContact,
@@ -228,7 +223,7 @@ export default function AboutPage() {
         <Grid container spacing={3}>
           {stats.map((stat, index) => (
             <Grid item xs={6} md={3} key={index}>
-              <Fade in={true} timeout={800} delay={index * 200}>
+              <Fade in={true} timeout={800}>
                 <Card
                   sx={{
                     textAlign: 'center',
@@ -329,7 +324,7 @@ export default function AboutPage() {
         <Grid container spacing={4}>
           {features.map((feature, index) => (
             <Grid item xs={12} md={6} key={index}>
-              <Fade in={true} timeout={800} delay={index * 200}>
+              <Fade in={true} timeout={800}>
                 <Card
                   sx={{
                     p: 4,
@@ -387,7 +382,7 @@ export default function AboutPage() {
           <Grid container spacing={4}>
             {teamValues.map((value, index) => (
               <Grid item xs={12} md={6} lg={3} key={index}>
-                <Fade in={true} timeout={800} delay={index * 100}>
+                <Fade in={true} timeout={800}>
                   <Card
                     sx={{
                       p: 4,

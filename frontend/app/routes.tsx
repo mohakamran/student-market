@@ -8,27 +8,17 @@ import ListingDetailPage from "../pages/Listings/ListingDetailPage";
 import CreateListingPage from "../pages/Listings/CreateListingPage";
 import ChatListPage from "../pages/Chat/ChatListPage";
 import ChatRoomPage from "../pages/Chat/ChatRoomPage";
-import CategoriesPage from "../pages/Listings/CategoriesPage";
+import CategoriesPage from "../pages/Listings/CategoriesPage.jsx";
 import HelpPage from "../pages/Support/HelpPage";
 import AboutPage from "../pages/Company/AboutPage";
-import ContactPage from "../pages/Support/ContactPage";
-import ReportPage from "../pages/Support/ReportPage";
-import CareersPage from "../pages/Company/CareersPage";
-import PrivacyPolicyPage from "../pages/Company/PrivacyPolicyPage";
-import ProfilePage from "../pages/User/ProfilePage";
+import ContactPage from "../pages/Support/ContactPage.jsx";
+import ReportPage from "../pages/Support/ReportPage.jsx";
+import CareersPage from "../pages/Company/CareersPage.jsx";
+import PrivacyPolicyPage from "../pages/Company/PrivacyPolicyPage.jsx";
+import ProfilePage from "../pages/User/ProfilePage.jsx";
 import MyListingsPage from "../pages/User/MyListingsPage";
-import SettingsPage from "../pages/User/SettingsPage";
-import FavoritesPage from "../pages/User/Favorites"; // Add this import
-
-
-
-// Simple placeholder for any missing pages
-const PlaceholderPage = ({ title }) => (
-  <div style={{ padding: '2rem', textAlign: 'center' }}>
-    <h1>{title}</h1>
-    <p>This page is under construction.</p>
-  </div>
-);
+import SettingsPage from "../pages/User/SettingsPage.jsx";
+import FavoritesPage from "../pages/User/Favorites.jsx";
 
 export const router = createBrowserRouter([
   {

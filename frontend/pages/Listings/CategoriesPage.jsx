@@ -196,7 +196,6 @@ export default function CategoriesPage() {
                   sx={{ 
                     textAlign: 'center',
                     mb: 1,
-                    color: theme.palette.text.primary,
                     background: `linear-gradient(135deg, ${category.color} 0%, ${alpha(category.color, 0.8)} 100%)`,
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',

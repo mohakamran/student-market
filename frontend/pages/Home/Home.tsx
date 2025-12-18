@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Typography,
@@ -9,34 +8,19 @@ import {
   CardMedia,
   Container,
   Chip,
-  IconButton,
   useTheme,
   alpha,
   Fade,
-  Avatar,
   Rating,
   Stack,
-  Paper,
-  Divider
 } from "@mui/material";
 import {
-  TrendingUp,
-  Favorite,
-  Share,
   LocationOn,
-  School,
-  Store,
-  Chat,
   Add,
   ArrowForward,
-  Verified,
-  LocalOffer,
   FlashOn,
-  People,
   Security,
   Rocket,
-  Star,
-  TrendingFlat,
   AutoAwesome,
   ShoppingBag,
   Groups,
@@ -347,7 +331,7 @@ export default function Home() {
               </Fade>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Fade in={true} timeout={1000} delay={300}>
+              <Fade in={true} timeout={1000}>
                 <Box sx={{ position: 'relative', zIndex: 1 }}>
                   <Card
                     sx={{
@@ -398,7 +382,7 @@ export default function Home() {
         <Grid container spacing={4}>
           {features.map((feature, index) => (
             <Grid item xs={12} md={6} key={index}>
-              <Fade in={true} timeout={800} delay={index * 200}>
+              <Fade in={true} timeout={800}>
                 <Card
                   sx={{
                     p: 4,
@@ -461,9 +445,9 @@ export default function Home() {
           </Box>
 
           <Grid container spacing={3}>
-            {sampleListings.map((item, index) => (
+            {sampleListings.map((item) => (
               <Grid item xs={12} sm={6} md={3} key={item.id}>
-                <Fade in={true} timeout={800} delay={index * 100}>
+                <Fade in={true} timeout={800}>
                   <Card
                     sx={{
                       borderRadius: 3,
@@ -605,9 +589,9 @@ export default function Home() {
   </Box>
 
   <Grid container spacing={3}>
-    {categories.map((category, index) => (
+    {categories.map((category) => (
       <Grid item xs={6} sm={4} md={2} key={category.name}>
-        <Fade in={true} timeout={800} delay={index * 100}>
+        <Fade in={true} timeout={800}>
           <Card
             component={RouterLink}
             to={`/listings?category=${category.name}`}
@@ -744,47 +728,54 @@ export default function Home() {
           </Box>
 
           <Grid container spacing={4}>
-            {testimonials.map((testimonial, index) => (
+            {testimonials.map((testimonial) => (
               <Grid item xs={12} md={4} key={testimonial.name}>
-                <Fade in={true} timeout={800} delay={index * 200}>
-                  <Card
-                    sx={{
-                      p: 4,
-                      borderRadius: 4,
-                      height: '100%',
-                      background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.9)} 0%, ${alpha(theme.palette.background.default, 0.7)} 100%)`,
-                      border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-                      boxShadow: `0 8px 32px ${alpha(theme.palette.common.black, 0.08)}`,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateY(-5px)',
-                        boxShadow: `0 15px 40px ${alpha(theme.palette.common.black, 0.12)}`,
-                      }
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-                      <Avatar 
-                        src={testimonial.avatar} 
-                        sx={{ 
-                          width: 60, 
-                          height: 60,
-                          border: `3px solid ${alpha(theme.palette.primary.main, 0.1)}`
-                        }} 
-                      />
-                      <Box>
-                        <Typography variant="h6" fontWeight={800}>
-                          {testimonial.name}
+                <Fade in={true} timeout={800}>
+                  <Box>
+                    <Card
+                      sx={{
+                        height: '100%',
+                        background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.9)} 0%, ${alpha(theme.palette.background.default, 0.7)} 100%)`,
+                        backdropFilter: 'blur(10px)',
+                        border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+                        borderRadius: 3,
+                        overflow: 'hidden',
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          transform: 'translateY(-5px)',
+                          boxShadow: `0 20px 40px ${alpha(theme.palette.common.black, 0.1)}`
+                        }
+                      }}
+                    >
+                      <CardContent sx={{ p: 4 }}>
+                        <Typography variant="h4" fontWeight={700} gutterBottom>
+                          Start Selling Today
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {testimonial.role}
+                        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                          Join thousands of students buying and selling on our platform
                         </Typography>
-                      </Box>
-                    </Box>
-                    <Rating value={testimonial.rating} readOnly sx={{ mb: 2, color: theme.palette.warning.main }} />
+                        <Button
+                          variant="contained"
+                          size="large"
+                          endIcon={<ArrowForward />}
+                          sx={{
+                            borderRadius: 2,
+                            textTransform: 'none',
+                            fontWeight: 600,
+                            px: 4
+                          }}
+                          component={RouterLink}
+                          to="/listings/create"
+                        >
+                          List Your Item
+                        </Button>
+                      </CardContent>
+                    </Card>
+                    <Rating value={testimonial.rating} readOnly sx={{ mb: 2, mt: 2, color: theme.palette.warning.main }} />
                     <Typography variant="body1" sx={{ fontStyle: 'italic', lineHeight: 1.7, color: theme.palette.text.primary }}>
                       "{testimonial.text}"
                     </Typography>
-                  </Card>
+                  </Box>
                 </Fade>
               </Grid>
             ))}

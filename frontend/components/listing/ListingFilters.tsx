@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -319,7 +319,7 @@ export default function ListingFilters({ onFilterChange }: Props) {
               </Typography>
               <Slider
                 value={filters.priceRange}
-                onChange={(e, value) => handleChange("priceRange", value)}
+                onChange={(_e, value) => handleChange("priceRange", value)}
                 valueLabelDisplay="auto"
                 valueLabelFormat={formatPrice}
                 min={0}

@@ -4,7 +4,6 @@ import {
   Typography,
   List,
   ListItem,
-  ListItemText,
   ListItemAvatar,
   Avatar,
   Divider,
@@ -22,11 +21,7 @@ import {
 import {
   Search,
   FilterList,
-  MoreVert,
   MarkChatRead,
-  Block,
-  Report,
-  Delete,
   Person,
   Store
 } from "@mui/icons-material";
@@ -84,7 +79,6 @@ export default function ChatListPage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const theme = useTheme();
 
   const handleChatClick = (id: number) => {
@@ -101,14 +95,6 @@ export default function ChatListPage() {
     chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase()) ||
     chat.item.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMenuAnchor(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setMenuAnchor(null);
-  };
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
@@ -258,33 +244,15 @@ export default function ChatListPage() {
                       >
                         {chat.name}
                       </Typography>
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            color: theme.palette.text.secondary,
-                            fontWeight: 500,
-                          }}
-                        >
-                          {chat.timestamp}
-                        </Typography>
-                        <IconButton
-                          size="small"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleMenuOpen(e);
-                          }}
-                          sx={{
-                            color: theme.palette.text.secondary,
-                            "&:hover": {
-                              color: theme.palette.primary.main,
-                              backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                            },
-                          }}
-                        >
-                          <MoreVert />
-                        </IconButton>
-                      </Box>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: theme.palette.text.secondary,
+                          fontWeight: 500,
+                        }}
+                      >
+                        {chat.timestamp}
+                      </Typography>
                     </Box>
 
                     {/* Item Info */}

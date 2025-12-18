@@ -20,7 +20,6 @@ import {
   VisibilityOff,
   Email,
   Lock,
-  Person,
   Google,
   Facebook,
   School,

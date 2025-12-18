@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Card,
@@ -15,7 +15,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  OutlinedInput,
   useTheme,
   alpha,
   Container,
@@ -23,23 +22,15 @@ import {
   Step,
   StepLabel,
   Paper,
-  Divider,
   Alert,
   InputAdornment
 } from "@mui/material";
 import {
   PhotoCamera,
   Close,
-  Add,
-  Category,
-  Sell,
-  Description,
-  LocationOn,
-  LocalOffer,
   CheckCircle,
   ArrowForward,
   ArrowBack,
-  Visibility
 } from "@mui/icons-material";
 
 const categories = [
@@ -67,21 +58,21 @@ const prefectures = [
 ];
 
 export default function CreateListingPage() {
-  const [activeStep, setActiveStep] = useState(0);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [category, setCategory] = useState("");
-  const [condition, setCondition] = useState("");
-  const [prefecture, setPrefecture] = useState("");
-  const [photos, setPhotos] = useState([]);
-  const [previewUrls, setPreviewUrls] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeStep, setActiveStep] = useState<number>(0);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const [condition, setCondition] = useState<string>("");
+  const [prefecture, setPrefecture] = useState<string>("");
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const theme = useTheme();
 
   const steps = ['Basic Information', 'Item Details', 'Review & Publish'];
 
-  const handlePhotoChange = (e) => {
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const filesArray = Array.from(e.target.files);
       const newPhotos = [...photos, ...filesArray];
@@ -89,11 +80,11 @@ export default function CreateListingPage() {
 
       // Generate preview URLs
       const newUrls = filesArray.map((file) => URL.createObjectURL(file));
-      setPreviewUrls([...previewUrls, ...newUrls]);
+      setPreviewUrls(prev => [...prev, ...newUrls]);
     }
   };
 
-  const handleRemovePhoto = (index) => {
+  const handleRemovePhoto = (index: number) => {
     const newPhotos = [...photos];
     const newUrls = [...previewUrls];
     newPhotos.splice(index, 1);
@@ -102,35 +93,209 @@ export default function CreateListingPage() {
     setPreviewUrls(newUrls);
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      // Reset form or navigate
+      setActiveStep(0);
+      setTitle("");
+      setDescription("");
+      setPrice("");
+      setCategory("");
+      setCondition("");
+      setPrefecture("");
+      setPhotos([]);
+      setPreviewUrls([]);
+    }, 2000);
+  };
+
+  const renderStepContent = (step: number) => {
+    switch (step) {
+      case 0:
+        return (
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Title"
+                value={title}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Description"
+                multiline
+                rows={4}
+                value={description}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Price (¥)"
+                type="number"
+                value={price}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrice(e.target.value)}
+                required
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">¥</InputAdornment>,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth required>
+                <InputLabel>Category</InputLabel>
+                <Select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  label="Category"
+                >
+                  {categories.map((cat) => (
+                    <MenuItem key={cat} value={cat}>
+                      {cat}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        );
+      case 1:
+        return (
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth required>
+                <InputLabel>Condition</InputLabel>
+                <Select
+                  value={condition}
+                  onChange={(e) => setCondition(e.target.value)}
+                  label="Condition"
+                >
+                  {conditions.map((cond) => (
+                    <MenuItem key={cond} value={cond}>
+                      {cond}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth required>
+                <InputLabel>Location (Prefecture)</InputLabel>
+                <Select
+                  value={prefecture}
+                  onChange={(e) => setPrefecture(e.target.value)}
+                  label="Location (Prefecture)"
+                >
+                  {prefectures.map((pref) => (
+                    <MenuItem key={pref} value={pref}>
+                      {pref}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h6" gutterBottom>
+                Photos
+              </Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 2 }}>
+                {previewUrls.map((url, index) => (
+                  <Box key={index} sx={{ position: 'relative' }}>
+                    <Avatar
+                      src={url}
+                      variant="rounded"
+                      sx={{ width: 100, height: 100 }}
+                    />
+                    <IconButton
+                      size="small"
+                      sx={{
+                        position: 'absolute',
+                        top: -8,
+                        right: -8,
+                        bgcolor: 'background.paper',
+                        boxShadow: 1
+                      }}
+                      onClick={() => handleRemovePhoto(index)}
+                    >
+                      <Close fontSize="small" />
+                    </IconButton>
+                  </Box>
+                ))}
+                {previewUrls.length < 5 && (
+                  <Button
+                    variant="outlined"
+                    component="label"
+                    sx={{
+                      width: 100,
+                      height: 100,
+                      borderRadius: 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <PhotoCamera sx={{ mb: 1 }} />
+                    Add Photo
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      multiple
+                      onChange={handlePhotoChange}
+                    />
+                  </Button>
+                )}
+              </Box>
+            </Grid>
+          </Grid>
+        );
+      case 2:
+        return (
+          <Box>
+            <Typography variant="h6" gutterBottom>
+              Review Your Listing
+            </Typography>
+            <Paper sx={{ p: 3, mb: 3 }}>
+              <Typography variant="subtitle1" gutterBottom>
+                {title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" paragraph>
+                {description}
+              </Typography>
+              <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                <Chip label={`¥${price}`} color="primary" />
+                <Chip label={category} />
+                <Chip label={condition} />
+                <Chip label={prefecture} />
+              </Stack>
+            </Paper>
+            <Alert severity="info">
+              Your listing will be visible to all students in your area. Make sure all information is accurate before publishing.
+            </Alert>
+          </Box>
+        );
+      default:
+        return null;
+    }
+  };
+
   const handleNext = () => {
     setActiveStep((prev) => prev + 1);
   };
 
   const handleBack = () => {
     setActiveStep((prev) => prev - 1);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    console.log({ title, description, price, category, condition, prefecture, photos });
-    alert("Listing submitted successfully! 🎉");
-    
-    // Reset form
-    setTitle("");
-    setDescription("");
-    setPrice("");
-    setCategory("");
-    setCondition("");
-    setPrefecture("");
-    setPhotos([]);
-    setPreviewUrls([]);
-    setActiveStep(0);
-    setIsSubmitting(false);
   };
 
   const isStepValid = () => {
@@ -143,532 +308,6 @@ export default function CreateListingPage() {
         return true;
       default:
         return false;
-    }
-  };
-
-  const renderStepContent = (step) => {
-    switch (step) {
-      case 0:
-        return (
-          <Box sx={{ maxWidth: 800, mx: 'auto' }}>
-            <Typography variant="h6" sx={{ mb: 3, fontWeight: 600, color: theme.palette.primary.main }}>
-              Tell us about your item
-            </Typography>
-            
-            <Grid container spacing={4}>
-              {/* Title Field */}
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <TextField
-                    fullWidth
-                    required
-                    label="Listing Title"
-                    placeholder="e.g., MacBook Pro 2023 - Excellent Condition"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Sell sx={{ color: theme.palette.text.secondary }} />
-                        </InputAdornment>
-                      ),
-                    }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: 2,
-                        fontSize: "1rem",
-                        "&:hover fieldset": {
-                          borderColor: theme.palette.primary.main,
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: theme.palette.primary.main,
-                          borderWidth: 2,
-                        },
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": {
-                        color: theme.palette.primary.main,
-                      },
-                    }}
-                  />
-                  <Typography variant="caption" color="text.secondary" sx={{ mt: 1, ml: 1 }}>
-                    Be specific and descriptive to attract more buyers
-                  </Typography>
-                </FormControl>
-              </Grid>
-
-              {/* Price Field */}
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <TextField
-                    fullWidth
-                    required
-                    type="number"
-                    label="Price"
-                    placeholder="0"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LocalOffer sx={{ color: theme.palette.text.secondary }} />
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Typography sx={{ color: theme.palette.text.secondary, fontWeight: 600 }}>
-                            JPY
-                          </Typography>
-                        </InputAdornment>
-                      ),
-                    }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: 2,
-                        fontSize: "1rem",
-                        "&:hover fieldset": {
-                          borderColor: theme.palette.primary.main,
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: theme.palette.primary.main,
-                          borderWidth: 2,
-                        },
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": {
-                        color: theme.palette.primary.main,
-                      },
-                    }}
-                  />
-                </FormControl>
-              </Grid>
-
-              {/* Description Field */}
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <TextField
-                    fullWidth
-                    required
-                    label="Description"
-                    placeholder="Describe your item in detail... Include condition, features, specifications, and any relevant information that buyers should know."
-                    multiline
-                    rows={6}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start" sx={{ alignSelf: 'flex-start', mt: 1.5 }}>
-                          <Description sx={{ color: theme.palette.text.secondary }} />
-                        </InputAdornment>
-                      ),
-                    }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: 2,
-                        fontSize: "1rem",
-                        alignItems: 'flex-start',
-                        "&:hover fieldset": {
-                          borderColor: theme.palette.primary.main,
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: theme.palette.primary.main,
-                          borderWidth: 2,
-                        },
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": {
-                        color: theme.palette.primary.main,
-                      },
-                    }}
-                  />
-                  <Typography variant="caption" color="text.secondary" sx={{ mt: 1, ml: 1 }}>
-                    Detailed descriptions help buyers make informed decisions
-                  </Typography>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Box>
-        );
-
-      case 1:
-        return (
-          <Box sx={{ maxWidth: 800, mx: 'auto' }}>
-            <Typography variant="h6" sx={{ mb: 3, fontWeight: 600, color: theme.palette.primary.main }}>
-              Add item details and photos
-            </Typography>
-            
-            <Grid container spacing={4}>
-              {/* Category Field */}
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Category</InputLabel>
-                  <Select
-                    value={category}
-                    label="Category"
-                    onChange={(e) => setCategory(e.target.value)}
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <Category sx={{ color: theme.palette.text.secondary, ml: 1 }} />
-                      </InputAdornment>
-                    }
-                    sx={{
-                      borderRadius: 2,
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: alpha(theme.palette.text.primary, 0.23),
-                      },
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: theme.palette.primary.main,
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: theme.palette.primary.main,
-                        borderWidth: 2,
-                      },
-                    }}
-                  >
-                    {categories.map((cat) => (
-                      <MenuItem key={cat} value={cat}>
-                        {cat}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              {/* Condition Field */}
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Condition</InputLabel>
-                  <Select
-                    value={condition}
-                    label="Condition"
-                    onChange={(e) => setCondition(e.target.value)}
-                    sx={{
-                      borderRadius: 2,
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: alpha(theme.palette.text.primary, 0.23),
-                      },
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: theme.palette.primary.main,
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: theme.palette.primary.main,
-                        borderWidth: 2,
-                      },
-                    }}
-                  >
-                    {conditions.map((cond) => (
-                      <MenuItem key={cond} value={cond}>
-                        {cond}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              {/* Location Field */}
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Location</InputLabel>
-                  <Select
-                    value={prefecture}
-                    label="Location"
-                    onChange={(e) => setPrefecture(e.target.value)}
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <LocationOn sx={{ color: theme.palette.text.secondary, ml: 1 }} />
-                      </InputAdornment>
-                    }
-                    sx={{
-                      borderRadius: 2,
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: alpha(theme.palette.text.primary, 0.23),
-                      },
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: theme.palette.primary.main,
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: theme.palette.primary.main,
-                        borderWidth: 2,
-                      },
-                    }}
-                  >
-                    {prefectures.map((pref) => (
-                      <MenuItem key={pref} value={pref}>
-                        {pref}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              {/* Photos Section */}
-              <Grid item xs={12}>
-                <Divider sx={{ my: 2 }} />
-                <Box sx={{ mb: 3 }}>
-                  <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-                    Photos ({photos.length}/8)
-                  </Typography>
-                  <Alert severity="info" sx={{ borderRadius: 2, mb: 3 }}>
-                    Add clear photos from different angles. First photo will be the cover image.
-                    Maximum 8 photos allowed.
-                  </Alert>
-
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, mb: 2 }}>
-                    {/* Photo Upload Button */}
-                    <Button
-                      variant="outlined"
-                      component="label"
-                      disabled={photos.length >= 8}
-                      sx={{
-                        width: 140,
-                        height: 140,
-                        borderRadius: 2,
-                        border: `2px dashed ${photos.length >= 8 ? theme.palette.action.disabled : alpha(theme.palette.primary.main, 0.4)}`,
-                        flexDirection: "column",
-                        gap: 1,
-                        "&:hover": {
-                          border: `2px dashed ${photos.length >= 8 ? theme.palette.action.disabled : theme.palette.primary.main}`,
-                          backgroundColor: photos.length >= 8 ? 'transparent' : alpha(theme.palette.primary.main, 0.04),
-                        },
-                      }}
-                    >
-                      <PhotoCamera 
-                        sx={{ 
-                          fontSize: 32,
-                          color: photos.length >= 8 ? theme.palette.action.disabled : theme.palette.primary.main 
-                        }} 
-                      />
-                      <Typography 
-                        variant="body2" 
-                        align="center"
-                        sx={{
-                          color: photos.length >= 8 ? theme.palette.action.disabled : 'inherit',
-                          fontWeight: 600
-                        }}
-                      >
-                        Add Photos
-                      </Typography>
-                      <input
-                        hidden
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        onChange={handlePhotoChange}
-                        disabled={photos.length >= 8}
-                      />
-                    </Button>
-
-                    {/* Photo Previews */}
-                    {previewUrls.map((url, idx) => (
-                      <Box key={idx} sx={{ position: "relative" }}>
-                        <Avatar
-                          variant="rounded"
-                          src={url}
-                          alt={`Preview ${idx}`}
-                          sx={{
-                            width: 140,
-                            height: 140,
-                            borderRadius: 2,
-                            border: `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
-                          }}
-                        />
-                        {idx === 0 && (
-                          <Chip
-                            label="Cover"
-                            size="small"
-                            color="primary"
-                            sx={{
-                              position: "absolute",
-                              top: 8,
-                              left: 8,
-                              fontSize: '0.7rem',
-                              height: 22,
-                              fontWeight: 700,
-                            }}
-                          />
-                        )}
-                        <IconButton
-                          size="small"
-                          onClick={() => handleRemovePhoto(idx)}
-                          sx={{
-                            position: "absolute",
-                            top: -8,
-                            right: -8,
-                            backgroundColor: theme.palette.error.main,
-                            color: "white",
-                            "&:hover": {
-                              backgroundColor: theme.palette.error.dark,
-                            },
-                          }}
-                        >
-                          <Close fontSize="small" />
-                        </IconButton>
-                      </Box>
-                    ))}
-                  </Box>
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-        );
-
-      case 2:
-        return (
-          <Box sx={{ maxWidth: 800, mx: 'auto' }}>
-            <Typography variant="h6" sx={{ mb: 3, fontWeight: 600, color: theme.palette.primary.main }}>
-              Review your listing before publishing
-            </Typography>
-            
-            <Paper
-              sx={{
-                p: 4,
-                borderRadius: 3,
-                background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.02)} 0%, ${alpha(theme.palette.background.paper, 1)} 100%)`,
-                border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-                <Visibility color="primary" />
-                <Typography variant="h6" fontWeight={700}>
-                  Listing Preview
-                </Typography>
-              </Box>
-              
-              <Grid container spacing={4}>
-                {/* Image Column */}
-                <Grid item xs={12} md={5}>
-                  {previewUrls.length > 0 ? (
-                    <Avatar
-                      variant="rounded"
-                      src={previewUrls[0]}
-                      sx={{
-                        width: "100%",
-                        height: 250,
-                        borderRadius: 2,
-                        boxShadow: `0 8px 32px ${alpha(theme.palette.common.black, 0.1)}`,
-                      }}
-                    />
-                  ) : (
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: 250,
-                        borderRadius: 2,
-                        backgroundColor: alpha(theme.palette.action.disabled, 0.1),
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexDirection: 'column',
-                        gap: 2,
-                        border: `2px dashed ${alpha(theme.palette.action.disabled, 0.3)}`,
-                      }}
-                    >
-                      <PhotoCamera sx={{ fontSize: 48, color: theme.palette.text.secondary }} />
-                      <Typography color="text.secondary" textAlign="center">
-                        No photos added
-                      </Typography>
-                    </Box>
-                  )}
-                  
-                  {/* Additional Photos */}
-                  {previewUrls.length > 1 && (
-                    <Box sx={{ mt: 2 }}>
-                      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                        Additional Photos ({previewUrls.length - 1})
-                      </Typography>
-                      <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
-                        {previewUrls.slice(1).map((url, idx) => (
-                          <Avatar
-                            key={idx}
-                            variant="rounded"
-                            src={url}
-                            sx={{
-                              width: 60,
-                              height: 60,
-                              borderRadius: 1,
-                              border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-                            }}
-                          />
-                        ))}
-                      </Stack>
-                    </Box>
-                  )}
-                </Grid>
-
-                {/* Details Column */}
-                <Grid item xs={12} md={7}>
-                  <Stack spacing={3}>
-                    <Box>
-                      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                        TITLE
-                      </Typography>
-                      <Typography variant="h6" fontWeight={700} sx={{ lineHeight: 1.4 }}>
-                        {title || "No title provided"}
-                      </Typography>
-                    </Box>
-
-                    <Box>
-                      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                        PRICE
-                      </Typography>
-                      <Typography
-                        variant="h4"
-                        sx={{
-                          fontWeight: 800,
-                          color: theme.palette.primary.main,
-                        }}
-                      >
-                        {price ? `¥${Number(price).toLocaleString()}` : "Not set"}
-                      </Typography>
-                    </Box>
-
-                    <Box>
-                      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2 }}>
-                        DETAILS
-                      </Typography>
-                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                        <Chip 
-                          label={category || "No category"} 
-                          color="primary" 
-                          variant="outlined" 
-                        />
-                        <Chip 
-                          label={condition || "No condition"} 
-                          color="secondary" 
-                          variant="outlined" 
-                        />
-                        <Chip 
-                          label={prefecture || "No location"} 
-                          color="success" 
-                          variant="outlined" 
-                        />
-                      </Box>
-                    </Box>
-
-                    <Box>
-                      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                        DESCRIPTION
-                      </Typography>
-                      <Paper
-                        variant="outlined"
-                        sx={{
-                          p: 2,
-                          borderRadius: 1,
-                          backgroundColor: alpha(theme.palette.background.default, 0.5),
-                          minHeight: 100,
-                        }}
-                      >
-                        <Typography variant="body1" sx={{ lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
-                          {description || "No description provided"}
-                        </Typography>
-                      </Paper>
-                    </Box>
-                  </Stack>
-                </Grid>
-              </Grid>
-            </Paper>
-          </Box>
-        );
-
-      default:
-        return null;
     }
   };
 
