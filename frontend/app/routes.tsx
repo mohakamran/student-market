@@ -19,10 +19,12 @@ import ProfilePage from "../pages/User/ProfilePage.jsx";
 import MyListingsPage from "../pages/User/MyListingsPage";
 import SettingsPage from "../pages/User/SettingsPage.jsx";
 import FavoritesPage from "../pages/User/Favorites.jsx";
+import NotFoundPage from "../pages/Error/NotFoundPage";
 
 export const router = createBrowserRouter([
   {
     element: <Layout />,
+    errorElement: <NotFoundPage />,
     children: [
       { path: "/", element: <Home /> },
       { path: "/login", element: <Login /> },
@@ -44,6 +46,7 @@ export const router = createBrowserRouter([
       { path: "/my-listings", element: <MyListingsPage /> },
       { path: "/settings", element: <SettingsPage /> },
       { path: "/favorites", element: <FavoritesPage /> }, // Add this route
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
 ]);
